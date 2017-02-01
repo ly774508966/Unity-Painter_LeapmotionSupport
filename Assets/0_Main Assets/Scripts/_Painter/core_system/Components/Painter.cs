@@ -15,11 +15,15 @@ public class Painter : MonoBehaviour
     public float maxTimeToGrowLine = 1f;
     [Tooltip("From the colors list, which if the first color to pick")]
     public int startColorIndex = 0;
+    [Range(0.1f, 2f)]
+    public float eraserSize = 1f;
 
+    [SerializeField]
+    private bool _erasing;
     private Vector3 _lastPosition;
     private float _zDepth;
     private LineRenderer _editingLine;
-    private float _timeInPresion;
+    private float _timeInPression;
     private Vector3 _startPosition;
 
     void Start()
@@ -47,34 +51,48 @@ public class Painter : MonoBehaviour
     {
         _editingLine = null;
 
-        _timeInPresion = 0f;
+        _timeInPression = 0f;
 
         _startPosition = Vector3.zero;
     }
 
     void OnMouseDrag()
     {
-        if (_editingLine)
+        if (!_erasing)
         {
-            var mouseInWorld = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, _zDepth));
-            var distanceFrom = Vector3.Distance(mouseInWorld, _lastPosition);
-            var distanceFromStart = Vector3.Distance(mouseInWorld, _startPosition);
-            // Draw a new position
-            if (distanceFrom >= minDistanceToDraw)
+            if (_editingLine)
             {
-                _editingLine.numPositions++;
-                _editingLine.SetPosition(_editingLine.numPositions - 1, mouseInWorld);
-                _lastPosition = mouseInWorld;
-                // Reset start position to disable continue grow of the line width
-                _startPosition = Vector3.zero;
-            }
-            else if (minDistanceToDraw >= distanceFromStart)
-            {
-                if (_timeInPresion < maxTimeToGrowLine)
-                    _timeInPresion += Time.deltaTime;
+                var mouseInWorld = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, _zDepth));
+                var distanceFromLast = Vector3.Distance(mouseInWorld, _lastPosition);
 
-                _editingLine.startWidth = CalculateWidthTimeBased(_timeInPresion);
+                if (distanceFromLast >= minDistanceToDraw)
+                {
+                    _editingLine.numPositions++;
+                    _editingLine.SetPosition(_editingLine.numPositions - 1, mouseInWorld);
+                    _lastPosition = mouseInWorld;
+                    // Reset start position to disable continue grow of the line width
+                    _startPosition = Vector3.zero;
+                }
+
+                if (_startPosition != Vector3.zero)
+                {
+                    var distanceFromStart = Vector3.Distance(mouseInWorld, _startPosition);
+                    // Draw a new position
+
+                    if (minDistanceToDraw >= distanceFromStart)
+                    {
+                        if (_timeInPression < maxTimeToGrowLine)
+                        {
+                            _timeInPression += Time.deltaTime;
+                            _editingLine.startWidth = CalculateWidthTimeBased(_timeInPression);
+                        }
+                    }
+                }
             }
+        }
+        else
+        {
+
         }
     }
 
@@ -88,5 +106,18 @@ public class Painter : MonoBehaviour
         startColorIndex = up ? startColorIndex + 1 : startColorIndex - 1;
 
         startColorIndex = Mathf.Clamp(startColorIndex, 0, colors.Length - 1);
+    }
+
+    public void SetEraser(bool eraser)
+    {
+        _erasing = eraser;
+    }
+
+    public void CleanPainter()
+    {
+        for (int i = 0; i < lines.Count; i++)
+        {
+            lines[i].numPositions = 0;
+        }
     }
 }

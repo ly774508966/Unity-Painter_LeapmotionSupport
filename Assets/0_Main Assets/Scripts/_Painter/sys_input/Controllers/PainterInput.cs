@@ -23,6 +23,15 @@ public class PainterInput : MonoBehaviour
                 painter.ChangeColor(true);
             else if (Input.GetAxis("Mouse ScrollWheel") < 0f)
                 painter.ChangeColor(false);
+
+            if (Input.GetMouseButtonDown(1))
+                painter.SetEraser(true);
+
+            if (Input.GetMouseButtonUp(1))
+                painter.SetEraser(false);
+
+            if (Input.GetMouseButtonDown(2))
+                painter.CleanPainter();
         }
     }
 }

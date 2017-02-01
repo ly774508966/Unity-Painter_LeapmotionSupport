@@ -461,7 +461,10 @@ PlayerSettings:
   XboxOnePersistentLocalStorageSize: 0
   vrEditorSettings: {}
   cloudServicesEnabled:
+    Build: 1
     Collab: 1
+    ErrorHub: 0
+    Hub: 0
     UNet: 1
   cloudProjectId: a56a7883-d332-4d98-947c-a5568695187b
   projectName: Painter_LeapSupport

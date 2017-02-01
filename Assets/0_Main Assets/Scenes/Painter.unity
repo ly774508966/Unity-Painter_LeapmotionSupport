@@ -237,7 +237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7037cac949b622343bbd3b7fea817c5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  painter: {fileID: 0}
+  painter: {fileID: 1645441828}
 --- !u!114 &1645441828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,10 +259,12 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 37a2a22d804abdd46b3240ba8e8c7446, type: 2}
   - {fileID: 2100000, guid: 621f83c8290d9374593f96719af4a13f, type: 2}
   lines: []
-  minDistanceToDraw: 0.05
+  minDistanceToDraw: 0.1
   startLineWidth: 0.1
-  maxTimeToGrowLine: 2
+  maxTimeToGrowLine: 3
   startColorIndex: 0
+  eraserSize: 1
+  _erasing: 0
 --- !u!23 &1645441829
 MeshRenderer:
   m_ObjectHideFlags: 0
